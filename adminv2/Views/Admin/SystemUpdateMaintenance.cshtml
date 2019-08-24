@@ -1,0 +1,123 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-9 col-sm-7 col-xs-7">
+        <button class="btn btn-success" onclick="OpenCustomModal('NewSystemUpdate')" ng-click="ctrl.setAdd();">Create Update</button>
+    </div>
+    <div class="col-md-3 col-sm-5 col-xs-5">
+        <div class="input-group">
+            <select class="form-control" ng-options="item.sysId as item.systemName for item in ctrl.systemList" ng-model="ctrl.selectedSysId" ng-change="ctrl.GetVersionList()">
+                <option value="" selected>Show all</option>
+            </select>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <p class="panel-title">Manage System Updates</p>
+            </div>
+            <div class="panel-body" style="height:50vh; overflow:auto;">
+                <table class="table table-hover ">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>System Name</th>
+                            <th>Version No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in ctrl.versionList | filter:search | orderBy:'-versionId'" class="{{item.status == 'I' ? 'text-danger' : ''}}">
+                            <td style="color:black !important">
+                                <a class="pointer" title="Edit Branch" ng-click="ctrl.setEdit(item.versionId)" onclick="OpenCustomModal('NewSystemUpdate')"><i class="glyphicon glyphicon-edit"></i></a>
+                                <a class="pointer text-danger" title="Delete Branch" ng-click="ctrl.GetSystemVersion(item.versionId)" onclick="OpenCustomModal('confirmDeleteModal')"><i class="glyphicon glyphicon-trash"></i></a>
+                            </td>
+                            <td>{{item.systemName}}</td>
+                            <td><a style="cursor:pointer" ng-click="ctrl.GetSystemVersion(item.versionId)" onclick="OpenCustomModal('updateLogs')">{{item.verno}}</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODALS -->
+<div id="NewSystemUpdate" class="popup-basic popup-xl bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="fa fa-pencil"></i>
+            </span>
+            <span class="panel-title"> {{ctrl.EventName}} system update </span>
+        </div>
+        <form name="SystemInputsForm">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" ng-model="ctrl.selectedVersion.verno" />
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-control" ng-options="item.sysId as item.systemName for item in ctrl.systemList" ng-model="ctrl.selectedVersion.systemId">
+                            <option value="" selected disabled>--Select System--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <summernote height="400px" ng-model="ctrl.selectedVersion.verreleasenote"></summernote>
+                </div>
+            </div>
+            <div class="panel-footer text-right">
+                <input type="submit" class="btn btn-primary" ng-hide="ctrl.EventName == 'Edit'" ng-disabled="!SystemInputsForm.$valid" ng-click="SystemInputsForm.$valid && ctrl.AddSystemUpdate()" value="Submit" />
+                <input type="submit" class="btn btn-primary" ng-show="ctrl.EventName == 'Edit'" ng-disabled="!SystemInputsForm.$valid" ng-click="SystemInputsForm.$valid && ctrl.EditSystemUpdate()" value="Update" />
+                <button type="button" class="btn btn-default" ng-click="self.GetBranchMstList()" onclick="CloseCustomModal('newBranch')">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="confirmDeleteModal" class="popup-basic bg-none mfp-with-anim mfp-hide">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="glyphicons glyphicons-circle_exclamation_mark"></i>
+            </span>
+            <span class="panel-title"> Confirm Deletion</span>
+        </div>
+        <form ng-submit="ctrl.DeleteSystemUpdate()">
+            <div class="panel-body">
+                Are you sure you want to delete {{ctrl.selectedVersion.verno}}?
+            </div>
+            <div class="panel-footer text-right">
+                <input type="submit" class="btn btn-danger" value="Delete" />
+                <button type="button" class="btn btn-default" onclick="CloseCustomModal('confirmDeleteModal')">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="updateLogs" class="popup-basic bg-none mfp-with-anim mfp-hide">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="glyphicons glyphicons-circle_exclamation_mark"></i>
+            </span>
+            <span class="panel-title"> Version Updates for {{ctrl.selectedVersion.systemName}} {{ctrl.selectedVersion.verno}}</span>
+        </div>
+        <form>
+            <div class="panel-body">
+                <p ng-bind-html="ctrl.selectedUpdateLogs"></p>
+            </div>
+            <div class="panel-footer text-right">
+                <button type="button" class="btn btn-default" onclick="CloseCustomModal('updateLogs')">Close</button>
+            </div>
+        </form>
+    </div>
+</div>

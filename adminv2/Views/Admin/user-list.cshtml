@@ -1,0 +1,74 @@
+﻿
+@{
+    Layout = null;
+}
+
+    <section class="content ">
+        <div class="panel panel-primary  no-padding">
+            <div class="panel-heading">
+                <span class="panel-icon">
+                    <i class="glyphicon glyphicon-list-alt"></i>
+                </span>
+                <span class="panel-title">User List</span>
+            </div>
+         
+            <div class="panel-body" data-ng-init="ctrl.getUserList()">
+                <div class="row mb10">
+                    <div class="col-md-12">
+                        @*<div class="btn-group block head-toolbar">
+                            <a ng-click="ctrl.newUser()" class="btn btn-info pointer">New User</a>
+                        </div>*@
+                        <button  class="btn btn-info pointer" ng-click="ctrl.newUser()">New user</button>
+                       
+                    </div>
+                </div>
+             
+
+                <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                         direction-links="true"
+                                         boundary-links="true"
+                                         on-page-change="ctrl.onInitDatatable(newPageNumber)">
+                </dir-pagination-controls>
+                <div id="exportable">
+
+
+                    <table id="testtable" class="table table-hover table-striped table-condensed table-mailbox table-responsive" context-menu data-target="menu-table">
+                        <tr>
+                            <th></th>
+                            <th>
+                                User ID
+                            </th>
+                            <th>
+                                Username
+                            </th>
+                            <th>
+                              Fullname
+                            </th>
+                            <th>
+                                Userrole
+                            </th>
+                            <th>
+                                UserType
+                            </th>
+                        </tr>
+                        <tr ng-repeat="x in ctrl.users|filter:search:strict">
+                            <td><a class="pointer" data-ng-click="ctrl.EditUser(x.userId)"><span class="fa fa-pencil"></span></a></td>
+                            <td>{{x.userId}}</td>                          
+                            <td>{{x.username}}</td>
+                            <td>{{x.firstname}} {{x.lastname}}</td>
+                            <td>{{x.userrole}}</td>
+                            <td>{{x.usertype ='E' ? 'Employee' : 'External Users' }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                         direction-links="true"
+                                         boundary-links="true"
+                                         on-page-change="ctrl.onInitDatatable(newPageNumber)">
+                </dir-pagination-controls>
+            </div>
+        </div>
+</section>
+
+
+    

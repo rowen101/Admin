@@ -1,0 +1,220 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-9 col-sm-7 col-xs-7">
+        <button class="btn btn-success" onclick="OpenCustomModal('newBranch')" ng-click="ctrl.GetDistrictList(); ctrl.setAdd();">Create New Branch</button>
+    </div>
+    @*<div class="col-md-3 col-sm-5 col-xs-5">
+        <div class="input-group">
+            <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+            <input type="text" class="form-control form-inline pull-right" placeholder="Search" ng-model="searchKpi">
+        </div>
+    </div>*@
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <p class="panel-title">Manage Branch Master</p>
+            </div>
+            <div class="panel-body" style="height:50vh; overflow:auto;">
+                <table class="table table-hover ">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Branch Code</th>
+                            <th>Name</th>
+                            <th>District Code</th>
+                            <th>Head</th>
+                            <th>SBU </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in ctrl.branchMstList | filter:search" class="{{item.status == 'I' ? 'text-danger' : ''}}">
+                            <td style="color:black !important">
+                                <a class="pointer" title="Edit Branch" ng-click="ctrl.getEditBranch(item.brancode); ctrl.GetDistrictList()" onclick="OpenCustomModal('newBranch')"><i class="glyphicon glyphicon-edit"></i></a>
+                                <a class="pointer text-danger" title="Delete Branch" ng-click="ctrl.setSelected(item.brancode)" onclick="OpenCustomModal('confirmDeleteModal')"><i class="glyphicon glyphicon-trash"></i></a>
+                                <span ng-show="item.status == 'A'">
+                                    <a class="pointer text-success" title="Deactivate Branch" ng-click="ctrl.DeactivateBranch(item.brancode)"><i class="glyphicon glyphicon-ok"></i></a>
+                                </span>
+                                <span ng-show="item.status == 'I'">
+                                    <a class="pointer text-danger" title="Activate Branch" ng-click="ctrl.ActivateBranch(item.brancode)"><i class="glyphicon glyphicon-ban-circle"></i></a>
+                                </span>
+                            </td>
+                            <td>{{item.brancode}}</td>
+                            <td>{{item.branname}}</td>
+                            <td>{{item.districtcode}}</td>
+                            <td>{{item.branchheadname}}</td>
+                            <td>{{item.sbu}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODALS -->
+<div id="newBranch" class="popup-basic popup-lg bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="fa fa-pencil"></i>
+            </span>
+            <span class="panel-title"> {{ctrl.EventName}} branch </span>
+        </div>
+        <form name="AddBranchMSTForm">
+            <div class="panel-body">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dstrictHead">District: </label>
+                            <select class="form-control" ng-options="item.districtcode as item.districtname for item in ctrl.districtList" 4 ng-model="ctrl.branchModel.districtcode">
+                                <option value="" selected disabled>----Select District ----</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="newBranchCode">Branch Code: </label>
+                            <input class="form-control" id="newBranchCode" type="text" ng-model="ctrl.branchModel.brancode" required uppercased ng-readonly="ctrl.EventName == 'Edit'" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="NewBranName">Branch Name : </label>
+                            <input class="form-control" id="NewBranName" type="text" ng-model="ctrl.branchModel.branname" required uppercased />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="NewBranAlias">Branch Alias : </label>
+                            <input class="form-control" id="NewBranAlias" type="text" ng-model="ctrl.branchModel.branalias" required uppercased />
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="newAddress">Address: </label>
+                            <textarea class="form-control" id="newAddress" type="text" ng-model="ctrl.branchModel.address" required uppercased></textarea>
+                        </div>
+                    </div>
+
+                  
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="newBranchEmpId">Branch Emp ID : </label>
+                            <input class="form-control" id="newBranchEmpId" type="text" ng-model="ctrl.branchModel.branchheadid" required />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="newHead">Branch Head : </label>
+                            <input class="form-control" id="newHead" type="text" ng-model="ctrl.branchModel.branchheadname" required />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="newHeadCont">Head Contact  : </label>
+                            <input class="form-control" id="newHeadCont" type="text" ng-model="ctrl.branchModel.branchheadcontact" required />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="newHeadEmail">Head Email  : </label>
+                            <input class="form-control" id="newHeadEmail" type="text" ng-model="ctrl.branchModel.branchheademail" required />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="newHris">HRIS Code : </label>
+                            <input class="form-control" id="newHris" type="text" required ng-model="ctrl.branchModel.hrisbranchcode" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="newSbu">SBU : </label>
+                            <input class="form-control" id="newSbu" type="text" ng-model="ctrl.branchModel.sbu" required uppercased />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="neLongitude">Longitude : </label>
+                            <input class="form-control" id="neLongitude" type="text" ng-model="ctrl.branchModel.longitude" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="newLatitude">Latitude : </label>
+                            <input class="form-control" id="newLatitude" type="text" ng-model="ctrl.branchModel.latitude" />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="newMapReference">Map Reference : </label>
+                            <textarea class="form-control" id="newMapReference" type="text" ng-model="ctrl.branchModel.mapreference"></textarea>
+                        </div>
+                    </div>
+
+                    @*<div class="col-md-4">
+                        <div class="checkbox-custom mb5">
+                            <input type="checkbox" id="newIsDef" ng-model="ctrl.branchModel.isdefault" ng-true-value="1" ng-false-value="0">
+                            <label for="newIsDef">is Default </label>
+                        </div>
+                    </div>*@
+
+                    <div class="col-md-4">
+                        <div class="checkbox-custom mb5">
+                            <input type="checkbox" id="newRFlag" ng-model="ctrl.branchModel.reportflag" ng-true-value="1" ng-false-value="0">
+                            <label for="newRFlag">Report Flag</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="checkbox-custom mb5">
+                            <input type="checkbox" id="newWithPISM" ng-model="ctrl.branchModel.withpism" ng-true-value="1" ng-false-value="0">
+                            <label for="newWithPISM">With PISM </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer text-right">
+                <input type="submit" class="btn btn-primary" ng-if="ctrl.EventName != 'Edit'" ng-disabled="!AddBranchMSTForm.$valid" ng-click="AddBranchMSTForm.$valid && ctrl.AddNewBranchMST()" value="Save" />
+                <input type="submit" class="btn btn-primary" ng-if="ctrl.EventName == 'Edit'" ng-disabled="!AddBranchMSTForm.$valid" ng-click="AddBranchMSTForm.$valid && ctrl.EditBranchMST()" value="Save" />
+                <button type="button" class="btn btn-default" ng-click="self.GetBranchMstList()" onclick="CloseCustomModal('newBranch')">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="confirmDeleteModal" class="popup-basic bg-none mfp-with-anim mfp-hide">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="glyphicons glyphicons-circle_exclamation_mark    "></i>
+            </span>
+            <span class="panel-title"> Confirm Deletion</span>
+        </div>
+        <form ng-submit="ctrl.DeleteBranchMST()">
+            <div class="panel-body">
+                Are you sure you want to delete {{ctrl.branchModel.brancode}}?
+            </div>
+            <div class="panel-footer text-right">
+                <input type="submit" class="btn btn-danger" value="Delete" />
+                <button type="button" class="btn btn-default" onclick="CloseCustomModal('confirmDeleteModal')">Close</button>
+            </div>
+        </form>
+    </div>
+</div>

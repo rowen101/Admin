@@ -1,0 +1,101 @@
+﻿@{
+    Layout = null;
+}
+
+
+<section class="content"  data-ng-init="getApps()">
+    <div class="panel panel-primary no-padding">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="glyphicon glyphicon-list-alt"></i>
+            </span>
+            <span class="panel-title">Application Menu List</span>
+        </div>
+        <div class="panel-body">
+           
+            <div class="callout callout-info" ng-show="Info">
+                <h4>{{infoTitle}}</h4>
+                <p>{{infoDetails}}</p>
+            </div>
+            <div class="btn-group block head-toolbar">
+                <a ng-click="newMenu()" class="btn btn-info pointer">New Menu</a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info">{{drpAppsCaption}}</button>
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li data-ng-repeat="x in systemList"><a data-ng-click="selectApps(x.sysId,x.sysname)" style="cursor:pointer">{{x.sysname}}</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <table class="table table-hover table-condensed  table-striped">
+                <tr>
+                    <th></th>
+                    <th>
+                        Menu Code
+                    </th>
+                    <th>
+                        Menu
+                    </th>
+                    <th>Menu Order</th>
+                    <th>
+                        Parent
+                    </th>
+                  
+                    <th>
+                        Active
+                    </th>
+                </tr>
+                <tr ng-repeat="x in menuList">
+                    <td>
+                    <a ng-click="editMenu(x.menuId)" class="pointer">update</a> &nbsp; 
+                    <a ng-click="onShowID(x.menuId,x.menuname); openModalForm('#modal-panel-prompt');" class="pointer font-cancel">remove</a>
+                    </td>
+                    <td>{{x.menucode}}</td>
+                    <td>{{x.menuname}}</td>
+                    <td>{{x.menuorder}}</td>
+                    <td>{{x.parentMenu}}</td>
+                    <td><span ng-class="x.isactive ? 'glyphicons glyphicons-check font-success' : 'glyphicons glyphicons-remove font-cancel'"></span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+</section>
+
+<!--modal delete prompt-->
+<div id="modal-panel-prompt" class="popup-basic bg-none mfp-with-anim mfp-hide">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-trash"></i>Prompt</span>
+        </div>
+        <div class="panel-body">
+            <!--Begin:Prompt Message-->
+            <div class="alert alert-danger alert-sm" ng-show="isError">
+                <i class="fa fa-remove pr10"></i>
+                <strong>ERROR!</strong>    {{errorMessage}}
+            </div>
+            <div class="alert alert-info alert-sm" ng-show="isSuccess">
+                <i class="fa fa-check"></i>
+                <strong>SUCCESS!</strong>  {{successMessage}}
+            </div>
+            <!--End:Prompt Message-->
+            <input type="hidden" id="menuid" data-ng-model="menuid" />
+            <p data-ng-hide="isSuccess">Want to remove <strong id="menuname" ng-model="menuname"></strong> ?</p>
+        </div>
+        <div class="panel-footer text-right">
+            <button class="btn btn-primary" data-ng-click="closeModalForm(); isError=false;isSuccess=false;" data-ng-show="isSuccess">Close</button>
+            <button class="btn btn-warning" data-ng-click="RemoveMenu();" data-ng-hide="isSuccess">Yes</button>
+            <button class="btn" data-ng-click="closeModalForm();" data-ng-hide="isSuccess">No</button>
+        </div>
+        </div>
+    </div>
+
+
+
+
+

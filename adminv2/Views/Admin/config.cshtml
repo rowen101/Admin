@@ -1,0 +1,47 @@
+﻿@{ Layout=null}
+<section class="content" ng-init="ctrl.onInit(1)">
+    <div class="panel box-solid">
+
+        <div class="panel-body " ng-show="!ctrl.isView">
+
+            <div class="row margin">
+                <div class="col-lg-2">
+                    <a class="btn btn-info btn-sm pointer btn-rounded btn-gradient" data-ng-click="ctrl.onNew()" data-ng-show="canAdd">New</a>
+                </div>
+            </div>
+
+            <span><br /></span>
+
+            <div id="exportable">
+                <table class="table table-condensed table-striped table-hover table-responsive" context-menu data-target="menu-table">
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Desc</th>
+                        <th>Path</th>
+                    </tr>
+
+
+                    <tr ng-show="activityItemList.length <= 0"><td colspan="6" style="text-align:center;">NO data!!</td></tr>
+                    <tr dir-paginate="item in ctrl.mailList | filter:search:strict" total-items="ctrl.total_count" class="pointer" data-ng-click="ctrl.onReadMail(item.body,item.mailId)">
+                        <td>{{item.mailId}}</td>
+                        <td>{{item.sendername}}</td>
+                        <td>{{item.recipients}}</td>
+                        <td>{{item.subject}}</td>
+                        <td>{{item.createdby}}</td>
+                        <td>{{item.createdate | date:"MM/dd/yyyy"}}</td>
+                    </tr>
+
+                </table>
+            </div>
+
+           
+
+        </div>
+
+   
+    </div>
+
+
+</section>

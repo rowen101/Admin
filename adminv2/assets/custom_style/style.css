@@ -1,0 +1,240 @@
+﻿
+
+.font-success {
+    color: #20d519;
+}
+
+.font-cancel {
+    color: #ff0000;
+}
+
+.head-toolbar {
+    margin: 5px 0 5px;
+}
+
+.head-margin {
+    margin-top: 5px;
+}
+
+.tr-head-default {
+    background-color: #f3f4f5;
+}
+
+.tr-head-success {
+    background-color: #00a65a;
+    color: #ffffff;
+    border-color: #008d4c;
+}
+
+.tr-head-danger {
+    background-color: #f56954;
+    color: #ffffff;
+    border-color: #f4543c;
+}
+
+.tr-head-info {
+    background-color: #00c0ef;
+    color: #ffffff;
+    border-color: #367fa9;
+}
+
+.tr-head-warning {
+    background-color: #f39c12;
+    color: #ffffff;
+    border-color: #e08e0b;
+}
+
+.link-label a {
+    text-decoration-style: dashed;
+}
+
+.rate-hit {
+    color: #008d4c;
+}
+
+.rate-miss {
+    color: #f4543c;
+}
+
+
+.img-view-select {
+    content: 'dronel gonzales';
+    -webkit-filter: brightness(50%);
+    -moz-filter: brightness(50%);
+    filter: url(#brightness);
+    filter: brightness(50%);
+}
+
+
+
+
+.modal-dialog {
+    position: relative;
+    width: auto;
+    max-width: 600px;
+    margin: 10px;
+}
+
+.modal-sm {
+    max-width: 300px;
+}
+
+.modal-lg {
+    max-width: 900px;
+}
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        margin: 30px auto;
+    }
+}
+
+@media (min-width: 320px) {
+    .modal-sm {
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
+@media (min-width: 620px) {
+    .modal-dialog {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .modal-lg {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+}
+
+@media (min-width: 920px) {
+    .modal-lg {
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
+
+.tr-icon-btn {
+    width: 30px;
+}
+
+/* textbox underline*/
+.textbox-underline {
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+/*remove border*/
+.remove-border{
+    border:none;
+}
+
+.pointer{
+    cursor:pointer;
+}
+
+.upper-case{
+    text-transform:uppercase;
+}
+
+.lower-case{
+    text-transform:uppercase;
+}
+
+.position-fixed {
+  position: fixed;
+}
+
+body {
+  font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
+  font-weight: 400;
+}
+
+p, span, a, ul, li, button {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+strong {
+  font-weight: 600;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5em;
+  font-weight: 300;
+}
+
+strong {
+  font-weight: 400;
+}
+
+.tile {
+  width: 100%;
+  display: inline-block;
+  box-sizing: border-box;
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+.tile .title {
+  margin-top: 0px;
+}
+.tile img{
+    height:64px;
+    width:64px;
+}
+.tile.purple, .tile.blue, .tile.red, .tile.orange, .tile.green {
+  color: #fff;
+}
+.tile.purple {
+  background: #5133AB;
+}
+.tile.purple:hover {
+  background: #3e2784;
+}
+.tile.red {
+  background: #AC193D;
+}
+.tile.red:hover {
+  background: #7f132d;
+}
+.tile.green {
+  background: #00A600;
+}
+.tile.green:hover {
+  background: #007300;
+}
+.tile.blue {
+  background: #2672EC;
+}
+.tile.blue:hover {
+  background: #125acd;
+}
+.tile.orange {
+  background: #DC572E;
+}
+.tile.orange:hover {
+  background: #b8431f;
+}
+
+/* list decoration none*/
+
+.lstrmvstyle li{
+    list-style:none;
+    
+}
+
+.issue-details{
+    display:inline-block;
+    width:90%;
+    white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
+}

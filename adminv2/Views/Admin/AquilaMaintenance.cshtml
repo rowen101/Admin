@@ -1,0 +1,465 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <accordion>
+
+        <div ng-controller="WmsServerCtrl as ctrl" style="margin-bottom:5px">
+
+            @*************************
+                END WMS Server
+                       ********************** *@
+
+            <accordion-group>
+
+                <accordion-heading>
+                    <span ng-click="ctrl.Refresh()">Server Maintenance</span>
+                </accordion-heading>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel" style="margin-bottom:5px;">
+                            <form name="serverForm" novalidate>
+                                <div class="panel-heading">
+                                    <span class="panel-icon">
+                                        <i class="glyphicons glyphicons-file_export"></i>
+                                    </span>
+                                    <span class="panel-title"><span class="text-warning">{{ctrl.actionName}}</span> WMS Server </span>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row mb5">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="sever">Server Name</label>
+                                                <input id="server" maxlength="20" type="text" class="form-control" ng-model="ctrl.wmsServer.servername" required uppercased />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="dbname">Database Name</label>
+                                                <input id="dbname" maxlength="50" type="text" class="form-control" ng-model="ctrl.wmsServer.dbname" required uppercased />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb5">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="ipadd">IP Address</label>
+                                                <input id="ipadd" maxlength="50" type="text" class="form-control" ng-model="ctrl.wmsServer.ipaddress" required />
+                                            </div>
+                                        </div>
+
+                                      
+
+                                    </div>
+
+                                    <div class="row mb5">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="ipadd">Web Address</label>
+                                                <input id="ipadd" maxlength="50" type="text" class="form-control" ng-model="ctrl.wmsServer.webaddress" required />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row mb5">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="uname">SQL User</label>
+                                                <input id="uname " type="text" maxlength="50" class="form-control" ng-model="ctrl.wmsServer.sqluser" required />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="pass">SQL Pass</label>
+                                                <input id="pass" type="password" maxlength="50" class="form-control" ng-model="ctrl.wmsServer.sqlpass" ng-required="ctrl.actionName == 'Add'" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row pull-right">
+                                        <input type="button" value="Save" ng-if="ctrl.actionName == 'Add'" ng-disabled="!serverForm.$valid" ng-click="serverForm.$valid && ctrl.AddWmsServer()" class="btn btn-success" />
+                                        <input type="button" value="Save" ng-if="ctrl.actionName == 'Edit'" ng-disabled="!serverForm.$valid" ng-click="serverForm.$valid && ctrl.EditWmsServer()" class="btn btn-success" />
+                                        <button type="button" class="btn btn-default" ng-click="ctrl.SetAdd();">Clear</button>
+                                    </div>
+
+                                </div>
+
+                            </form>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-offset-9 col-md-3">
+                                <input type="text" class="form-control" ng-model="search" placeholder="filter" />
+                            </div>
+                            <div class="col-md-12">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Id</th>
+                                            <th>Server</th>
+                                            <th>Database</th>
+                                            <th>IP Address</th>
+                                            <th>Web Address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in ctrl.mainList| filter:search" class="{{item.status == 'I' ? 'text-danger' : ''}}">
+                                       
+                                            <td style="color:black !important">
+                                                <a class="pointer" title="Edit" ng-click="ctrl.SetEdit(item.serverId)"><i class="glyphicon glyphicon-edit"></i></a>
+                                                <a class="pointer text-danger" title="Delete" ng-click="ctrl.ConfirmDelete(item.serverId)" onclick="OpenCustomModal('confirmDeleteServerModal')"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <span ng-show="item.status == 'A'">
+                                                    <a class="pointer text-success" title="Deactivate" ng-click="ctrl.DeactivateWmsServer(item.serverId)"><i class="glyphicon glyphicon-ok"></i></a>
+                                                </span>
+                                                <span ng-show="item.status == 'I'">
+                                                    <a class="pointer text-danger" title="Activate" ng-click="ctrl.ActivateWmsServer(item.serverId)"><i class="glyphicon glyphicon-ban-circle"></i></a>
+                                                </span>
+                                            </td>
+                                            <td>{{item.serverId}}</td>
+                                            <td>{{item.servername}}</td>
+                                            <td>{{item.dbname}}</td>
+                                            <td>{{item.ipaddress}}</td>
+                                            <td>{{item.webaddress}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="confirmDeleteServerModal" class="popup-basic bg-none mfp-with-anim mfp-hide">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <span class="panel-icon">
+                                <i class="glyphicons glyphicons-circle_exclamation_mark"></i>
+                            </span>
+                            <span class="panel-title"> Confirm Deletion</span>
+                        </div>
+                        <form ng-submit="ctrl.RemoveWmsServer()">
+                            <div class="panel-body">
+                                Are you sure you want to delete {{ctrl.servername}}?
+                            </div>
+                            <div class="panel-footer text-right">
+                                <input type="submit" class="btn btn-danger" value="Delete" />
+                                <button type="button" class="btn btn-default" onclick="CloseCustomModal('confirmDeleteServerModal')">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </accordion-group>
+        </div>
+
+        @*************************
+            START WMS WAREHOUSE
+                   ********************** *@
+        <div ng-controller="WmsWarehouseCtrl as ctrl" style="margin-bottom:5px">
+            <accordion-group>
+                <accordion-heading>
+                    <span ng-click="ctrl.Refresh()">Warehouse Maintenance</span>
+                </accordion-heading>
+
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel" style="margin-bottom:5px;">
+                            <form name="warehouseForm" novalidate>
+                                <div class="panel-heading">
+                                    <span class="panel-icon">
+                                        <i class="glyphicons glyphicons-file_export"></i>
+                                    </span>
+                                    <span class="panel-title"><span class="text-warning">{{ctrl.actionName}}</span> WMS Server Warehouse</span>
+                                </div>
+                                <div class="panel-body">
+
+                                   <div class="row mb5">
+                                       <div class="col-md-12">
+                                           <div class="form-group">
+                                               <label>Server</label>
+                                               <select class="form-control" ng-options="item.value as item.text for item in ctrl.serverList" ng-model="ctrl.serverId" ng-change="ctrl.GetWarehouseList()" required>
+                                                   <option value="" disabled>----Select Server----</option>
+                                               </select>
+                                           </div>
+                                       </div>
+                                   </div>
+
+                                    <div class="row mb5">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Branch</label>
+                                                <select class="form-control" ng-options="item.value as item.text for item in ctrl.branchList" ng-model="ctrl.warehouse.brancode" required>
+                                                    <option value="" disabled>----Select Branch----</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                        <div class="row mb5">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="warcode">Warehouse Code</label>
+                                                    <input id="warcode" maxlength="20" type="text" class="form-control" ng-model="ctrl.warehouse.warehousecode" required uppercased />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="storageIdentity">Storage Identity</label>
+                                                    <input id="storageIdentity" maxlength="20" type="text" class="form-control" ng-model="ctrl.warehouse.storageidentity" required uppercased />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb5">
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="wardesc">Description</label>
+                                                    <textarea id="wardesc" maxlength="100" type="text" class="form-control" ng-model="ctrl.warehouse.description" required uppercased></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @*{{ctrl.warehouse | json}}*@
+
+                                        <div class="row pull-right">
+                                            <input type="button" value="Save" ng-if="ctrl.actionName == 'Add'" ng-disabled="!warehouseForm.$valid" ng-click="warehouseForm.$valid && ctrl.AddWarehouse()" class="btn btn-success" />
+                                            <input type="button" value="Save" ng-if="ctrl.actionName == 'Edit'" ng-disabled="!warehouseForm.$valid" ng-click="warehouseForm.$valid && ctrl.EditWarehouse()" class="btn btn-success" />
+                                            <button type="button" class="btn btn-default" ng-click="ctrl.SetAdd()">Clear</button>
+                                        </div>
+
+                                    </div>
+
+                            </form>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-offset-9 col-md-3">
+                                <input type="text" class="form-control" ng-model="search" placeholder="filter" />
+                            </div>
+                            <div class="col-md-12">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Warehouse Code</th>
+                                            <th>Server</th>
+                                            <th>Description</th>
+                                            <th>Storage Identity</th>
+                                            <th>Brancode</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in ctrl.mainList| filter:search" class="{{item.status == 'I' ? 'text-danger' : ''}}">
+                                            <td style="color:black !important">
+                                                <a class="pointer" title="Edit" ng-click="ctrl.SetEdit(item.serverwarehouseId)"><i class="glyphicon glyphicon-edit"></i></a>
+                                                <a class="pointer text-danger" title="Delete" ng-click="ctrl.ConfirmDelete(item.serverwarehouseId)" onclick="OpenCustomModal('confirmDeleteWarehouseModal')"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <span ng-show="item.status == 'A'">
+                                                    <a class="pointer text-success" title="Deactivate" ng-click="ctrl.DeactivateWarehouse(item.serverwarehouseId)"><i class="glyphicon glyphicon-ok"></i></a>
+                                                </span>
+                                                <span ng-show="item.status == 'I'">
+                                                    <a class="pointer text-danger" title="Activate" ng-click="ctrl.ActivateWarehouse(item.serverwarehouseId)"><i class="glyphicon glyphicon-ban-circle"></i></a>
+                                                </span>
+                                            </td>
+                                            <td>{{item.warehousecode}}</td>
+                                            <td>{{item.servername}}</td>
+                                            <td>{{item.description}}</td>
+                                            <td>{{item.storageidentity}}</td>
+                                            <td>{{item.brancode}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="confirmDeleteWarehouseModal" class="popup-basic bg-none mfp-with-anim mfp-hide">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <span class="panel-icon">
+                                    <i class="glyphicons glyphicons-circle_exclamation_mark"></i>
+                                </span>
+                                <span class="panel-title"> Confirm Deletion</span>
+                            </div>
+                            <form ng-submit="ctrl.RemoveWarehouse()">
+                                <div class="panel-body">
+                                    Are you sure you want to delete {{ctrl.warehousecode}}?
+                                </div>
+                                <div class="panel-footer text-right">
+                                    <input type="submit" class="btn btn-danger" value="Delete" />
+                                    <button type="button" class="btn btn-default" onclick="CloseCustomModal('confirmDeleteWarehouseModal')">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </accordion-group>
+        </div>
+
+
+
+        @*************************
+            Start WMS USER SERVER WAREHOUSE
+                   ********************** *@
+        <div ng-controller="WmsUserswCtrl as ctrl" style="margin-bottom:5px">
+            <accordion-group>
+                <accordion-heading>
+                    <span ng-click="ctrl.Refresh()">User Warehouse Access Maintenance</span>
+                </accordion-heading>
+
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel" style="margin-bottom:5px;">
+                            <div class="panel-heading">
+                                <span class="panel-icon glyphicons glyphicons-file_export">
+                                </span>
+                                <span class="panel-title">Search User</span>
+                            </div>
+                            <div class="panel-body">
+
+                                <form name="searchUserForm" ng-submit="ctrl.GetUserList()" novalidate>
+                                    <div class="row mb5">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input id="empparam" class="form-control" type="text" ng-model="ctrl.userParam" placeholder="employee parameters" required uppercased>
+                                                    <span class="input-group-addon" ng-click="ctrl.GetUserList()"><span class="glyphicons glyphicons-search"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <form name="userServerWarehouseForm" novalidate>
+                                    <div class="row mb5">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="uswemp">Employee</label>
+                                                <select id="uswemp" class="form-control" ng-options="item.value as item.text for item in ctrl.userList" ng-model="ctrl.wmsUsersw.userId" ng-change="ctrl.GetUserWarehouseList()" required>
+                                                    <option value="" disabled>Select Employee</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    @*{{ctrl.wmsUsersw | json}}*@
+
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-offset-6 col-md-3">
+                                <div class="form-group">
+                                    <select id="uswsrv" class="form-control" ng-options="item.value as item.text for item in ctrl.serverList" ng-model="ctrl.wmsUsersw.serverId" ng-change="ctrl.GetUserWarehouseList()" required>
+                                        <option value="" disabled>Select Server</option>
+                                    </select>
+                                </div>
+                               
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" ng-model="search" placeholder="Filter" />
+                            </div>
+                            <div class="col-md-12">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true" style="background-color:white; border:0px">
+                                                        <span class="glyphicons glyphicons-expand"></span>
+                                                    </button>
+                                                    <div class="dropdown-backdrop"></div>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <a class="pointer" ng-click="ctrl.AddAllWarehouses()">Add All</a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="pointer" ng-click="ctrl.RemoveAllWarehouses()">Remove All</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </th>
+                                            <th>Warehouse Code</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in ctrl.mainList | filter:search">
+                                            <td style="color:black !important">
+                                                <div ng-show="item.status == 'A'">
+                                                    @*<a class="pointer text-success" title="Deactivate" ng-click="ctrl.DeactivateWmsUsersw(item.serverwarehouseId, item.userId)"><i class="glyphicon glyphicon-ok"></i></a>*@
+
+                                                    <div class="switch switch-success round switch-inline" ng-click="ctrl.ToggleInactiveWarhouse(item.serverwarehouseId)">
+                                                        <input type="checkbox" id="{{ind.warehousecode}}_inactive" checked disabled>
+                                                        <label for="{{item.warehousecode}}_inactive"></label>
+                                                    </div>
+                                                </div>
+
+                                                <div ng-show="item.status == 'I'">
+                                                    @*<a class="pointer text-danger" title="Activate" ng-click="ctrl.ActivateWmsUsersw(item.serverwarehouseId, item.userId)"><i class="glyphicon glyphicon-ban-circle"></i></a>*@
+                                                    
+                                                    <div class="switch switch-success round switch-inline" ng-click="ctrl.ToggleActiveWarhouse(item.serverwarehouseId)">
+                                                        <input type="checkbox" id="{{ind.warehousecode}}_inactive" disabled>
+                                                        <label for="{{item.warehousecode}}_inactive"></label>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{item.warehousecode}}</td>
+                                            <td>{{item.description}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="confirmDeleteUserServerWarehouseModal" class="popup-basic bg-none mfp-with-anim mfp-hide">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <span class="panel-icon">
+                                <i class="glyphicons glyphicons-circle_exclamation_mark"></i>
+                            </span>
+                            <span class="panel-title"> Confirm Deletion</span>
+                        </div>
+                        <form ng-submit="ctrl.RemoveWmsUsersw()">
+                            <div class="panel-body">
+                                Are you sure you want to delete {{ctrl.description}}?
+                            </div>
+                            <div class="panel-footer text-right">
+                                <input type="submit" class="btn btn-danger" value="Delete" />
+                                <button type="button" class="btn btn-default" onclick="CloseCustomModal('confirmDeleteUserServerWarehouseModal')">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </accordion-group>
+        </div>
+
+    </accordion>
+</div>

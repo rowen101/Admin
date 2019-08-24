@@ -1,0 +1,148 @@
+﻿@{
+    Layout = null;
+}
+
+<div id="skin-toolbox" ng-class="{'toolbox-open' : ctrl.sidebarStatus}">
+    <div class="panel">
+        <!--unselectable="on"-->
+        <div class="panel-heading" style="-webkit-user-select: none;" ng-click="ctrl.sideBarToggle()">
+            <span class="panel-icon">
+                <i class="fa fa-gear text-primary"></i>
+            </span>
+            <span class="panel-title"> Date criteria</span>
+        </div>
+        <form name="sidebarForm">
+            <div class="panel-body pn">
+                <div class="row" style="padding:20px">
+                    <div class="col-md-12">
+                        <select class="form-control" ng-options="item.value as item.text for item in ctrl.monthList" ng-model="ctrl.monthSelected"></select>
+                        <br />
+                        <select class="form-control" ng-options="item.value as item.text for item in ctrl.yearList" ng-model="ctrl.yearSelected"></select>
+                    </div>
+                </div>
+                <div class="form-group mn br-t p15">
+                    <button class="btn btn-primary btn-block pb10 pt10" ng-click="ctrl.GetPISMCalendar()">Get Calendar List</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row" style="position:fixed; right:10px; bottom: 70%; z-index:999">
+    <button class="btn btn-success" type="button" ng-disabled="ctrl.isUpdatedCount == 0" ng-click="ctrl.SaveCalendar()"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+</div>
+
+
+<div class="row">
+    <div class="col-md-9 col-sm-7 col-xs-7">
+        <button class="btn btn-success" ng-click="">Manual Add of Calendar</button>
+    </div>
+    <div class="col-md-3 col-sm-5 col-xs-5">
+        <div class="input-group">
+            <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+            <input type="text" class="form-control form-inline pull-right" placeholder="Search" ng-model="searchKpi">
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <p class="panel-title">Manage Calendar for <span class="text-warning">{{ctrl.monthName}} {{ctrl.yearSelected}}</span></p>
+            </div>
+            <div class="panel-body" style="height:60vh; overflow:auto;">
+                <table class="table table-hover ">
+                    <thead>
+                        <tr>
+                            <th style="width:10%">Analysis Date</th>
+                            <th style="width:10%">Analysis Week</th>
+                            <th style="width:10%">Day</th>
+                            <th style="width:10%">Has Work</th>
+                            <th style="width:55%">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in ctrl.calendarList | filter:searchKpi">
+                            <td>{{item.analysisdate}}</td>
+                            <td>{{item.analysisweek}}</td>
+                            <td>{{item.datename}}</td>
+                            <td>
+                                <span ng-hide="item.isnowork == 1" ng-click="ctrl.toggleNoWork(item.analysisdate)" class="text-success glyphicons glyphicons-check"></span>
+                                <span ng-show="item.isnowork == 1" ng-click="ctrl.toggleNoWork(item.analysisdate)" class="text-danger glyphicons glyphicons-unchecked"></span>
+                            </td>
+                            <td><input type="text" class="form-control" ng-model="item.remarks" ng-change="ctrl.CheckUpdates(item.analysisdate)" /> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div id="districtModal" class="popup-basic popup-lg bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="fa fa-pencil"></i>
+            </span>
+            <span class="panel-title"> {{ctrl.EventName}} District </span>
+        </div>
+        <form name="DistModalForm">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dcode">District Code : </label>
+                            <input ng-hide="ctrl.EventName == 'Edit'" class="form-control" id="dcode" type="text" ng-model="ctrl.districtModel.districtcode" uppercased />
+                            <p ng-show="ctrl.EventName == 'Edit'">{{ctrl.districtModel.districtcode}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dname">District Name : </label>
+                            <input class="form-control" id="dname" type="text" ng-model="ctrl.districtModel.districtname" uppercased />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="demail">Head Email : </label>
+                            <div class="input-group">
+                                <span class="input-group-addon" style="cursor:pointer;" ng-click="ctrl.GetDistrictHead()">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                <input class="form-control" id="demail" type="text" ng-model="ctrl.districtModel.districtheademail" ng-blur="ctrl.GetDistrictHead()" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dname">Head Name : </label>
+                            <input class="form-control" id="dname" type="text" ng-model="ctrl.districtModel.districtheadname" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dcont">Head Contact : </label>
+                            <input class="form-control" id="dcont" type="text" ng-model="ctrl.districtModel.districtheadcontact" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="did">Head ID : </label>
+                            <input class="form-control" id="did" type="text" ng-model="ctrl.districtModel.districtheadid" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer text-right">
+                <input type="submit" class="btn btn-primary" ng-hide="ctrl.EventName == 'Edit'" ng-disabled="!DistModalForm.$valid" ng-click="DistModalForm.$valid && ctrl.AddDistrict()" value="Submit" />
+                <input type="submit" class="btn btn-primary" ng-show="ctrl.EventName == 'Edit'" ng-disabled="!DistModalForm.$valid" ng-click="DistModalForm.$valid && ctrl.EditDistrict()" value="Update" />
+                <button type="button" class="btn btn-default" ng-click="self.GetBranchMstList()" onclick="CloseCustomModal('districtModal')">Close</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+

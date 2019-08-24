@@ -1,0 +1,142 @@
+﻿
+@{
+    Layout = null;
+}
+
+<section class="content " data-ng-init="ctrl.getUserList()">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="glyphicon glyphicon-list-alt"></i>
+            </span>
+            <span class="panel-title">WMS User List</span>
+        </div>
+        <div class="panel-body">
+            <div id="exportable">
+
+
+                <table id="testtable" class="table table-hover table-striped table-condensed table-mailbox table-responsive" data-ng-init="getUserList()" context-menu data-target="menu-table">
+                    <tr>
+                        <th>Action</th>
+                        <th>
+                            User ID
+                        </th>
+                        <th>
+                            UserName
+                        </th>
+                        <th>
+                            Tenure
+                        </th>
+                        <th>
+                            User Role
+                        </th>
+                        <th>
+                            Expired Date
+                        </th>
+                        <th>Status</th>
+                    </tr>
+                    <tr ng-repeat="x in ctrl.wmsUserList|filter:search:strict">
+                        <td><a class="pointer" data-ng-click="ctrl.onSetup(x)">Setup</a></td>
+                        <td>{{x.user_id}}</td>
+                        <td>{{x.user_name}}</td>
+                        <td>{{x.tenure}}</td>
+                        <td>{{x.user_description}}</td>
+                        <td>{{x.expired | date:"MM/dd/yyyy"}}</td>
+                        <td>{{x.Status}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--user setup-->
+<div id="modal-user-setup" class="popup-basic popup-lg bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>&nbsp; User Setup</span>
+        </div>
+        <div class="panel-body">
+            <div class="panel">
+                <div class="panel-heading">
+                    <!-- Begin: Add tab header-->
+                    <ul class="nav panel-tabs-border panel-tabs  panel-tabs panel-tabs-left tab-block">
+                        <li ng-class="{active : ctrl.selectedTab === 'Warehouse'}"
+                            ng-click="ctrl.onSelect('Warehouse');  ">
+                            <a class="pointer" data-toggle="tab">Warehouse</a>
+                        </li>
+                        <li ng-class="{active : ctrl.selectedTab === 'Server'}"
+                            ng-click="ctrl.onSelect('Server');  ">
+                            <a class="pointer" data-toggle="tab">Server</a>
+                        </li>
+                    </ul>
+                    <!--End: Add tab header-->
+                </div>
+                <div class="panel-body">
+                    <div class="row tab-pane" ng-show="ctrl.selectedTab == 'Warehouse'">
+                        <form class="form-horizontal">
+
+                            <div class="form-group row">
+                                <div class="col-lg-12">
+
+                                    <input type="text" class="form-control" placeholder="Username" data-ng-model="ctrl.user.user_name" disabled>
+                                </div>
+                                <div class="col-lg-12">
+
+                                    <input type="text" class="form-control" placeholder="Username" data-ng-model="ctrl.user.user_id" disabled>
+                                </div>
+                                <div class="col-lg-12">
+
+                                    <input type="password" class="form-control" placeholder="If you would like to change the password type a new one. Otherwise leave this blank." data-ng-model="ctrl.user.password" >
+
+                                </div>
+
+                            </div>
+                        </form>
+
+                        <span>{{ctrl.user.warehouse.length}} line item </span>
+                        <div style="overflow:scroll; max-height:400px;">
+                            <table class="table table-hover table-condensed table-striped">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>WarehouseCode</th>
+                                    <th>WarehouseDesccription</th>
+                                    <th></th>
+                                </tr>
+                                <tr ng-repeat="user in ctrl.user.warehouse">
+                                    <td><input type="checkbox" data-ng-model="user.isSelected" disabled /></td>
+                                    <td>{{user.WarehouseCode}}</td>
+                                    <td>{{user.WarehouseDesccription}}</td>
+
+
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row tab-pane" ng-show="ctrl.selectedTab == 'Server'">
+                        <table class="table table-hover table-condensed table-striped">
+                            <tr>
+                                <th>Action</th>
+                                <th>ServerName</th>
+                            </tr>
+                            <tr ng-repeat="user in ctrl.user.server">
+                                <td><input type="checkbox" data-ng-model="user.isSelected" /></td>
+                                <td>{{user.ServerName}}</td>
+                     
+                            </tr>
+                        </table>
+                    </div>
+                    </div>
+            </div>
+           
+        </div>
+
+        <div class="panel-footer text-right">
+
+            <button class="btn btn-default btn-rounded btn-gradient" data-ng-click="closeModalForm()">Close</button>
+            <button class="btn btn-primary btn-rounded btn-gradient" data-ng-click="ctrl.onSave()" >Save</button>
+        </div>
+    </div>
+</div>
+
+

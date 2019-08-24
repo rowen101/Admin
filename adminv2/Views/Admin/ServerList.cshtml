@@ -1,0 +1,117 @@
+﻿@{
+    Layout = null;
+}
+
+<section class="content ">
+    <div class="panel box-solid">
+       
+        <div class="panel-body" data-ng-init="ctrl.onInit(1)">
+            <div class="row margin">
+                <div class="col-lg-2">
+                    <a class="btn btn-info btn-sm pointer btn-rounded btn-gradient" data-ng-click="ctrl.onOpenServerSetup()" data-ng-show="canAdd">New</a>
+                </div>
+            </div>
+
+            <span><br /></span>
+            <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.onInit(newPageNumber)">
+            </dir-pagination-controls>
+            <div id="exportable">
+
+
+                <table id="testtable" class="table table-hover table-striped table-condensed table-mailbox table-responsive" context-menu data-target="menu-table">
+                    <tr>
+                        <th></th>
+                        <th>
+                            Server
+                        </th>
+                        <th>
+                            IP Address/Domain
+                        </th>
+                        <th>
+                            Database
+                        </th>
+
+                    </tr>
+                    <tr ng-repeat="x in ctrl.serverList|filter:search:strict">
+                        <td><a class="pointer" data-ng-click="ctrl.onEdit(x)" data-ng-show="canEdit"><span class="fa fa-pencil"></span></a>
+                         &nbsp; <a class="pointer text-danger" data-ng-click="ctrl.onDelete(x)" data-ng-show="canDelete"><span class="fa fa-trash"></span></a></td>
+                        <td>{{x.servername}}</td>
+                        <td>{{x.serveraddress}}</td>
+                        <td>{{x.databasename}}</td>
+                    </tr>
+                </table>
+            </div>
+            <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.onInit(newPageNumber)">
+            </dir-pagination-controls>
+        </div>
+    </div>
+</section>
+
+<!--server  setup-->
+<div id="modal-server-setup" class="popup-basic popup-lg bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>&nbsp; Server</span>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <h3 ng-class="ctrl.isTestOk==true ? 'text-success' :'text-danger'"><strong>{{ctrl.testMsg}}</strong></h3>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Server Name:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control" data-ng-model="ctrl.svr.servername" required maxlength="50" required>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Server Address/Domain:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control" data-ng-model="ctrl.svr.serveraddress" required maxlength="50" required>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Database:</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control" data-ng-model="ctrl.svr.databasename" required maxlength="50" required>
+
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-default btn-gradient btn-rounded" ng-click="ctrl.onTest()">Test</button>
+                    </div>
+                    </div>
+               
+            </form>
+        </div>
+        <div class="panel-footer text-right">
+            <button class="btn btn-default btn-rounded btn-gradient" data-ng-click="closeModalForm()">Cancel</button>
+            <button class="btn btn-success btn-rounded btn-gradient" data-ng-click="ctrl.onSave()">Save</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!--sever delete modal-->
+<div id="modal-server-delete-confirm" class="popup-basic popup-sm bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-trash"></i>&nbsp; System Message</span>
+        </div>
+        <div class="panel-body">
+            <p>Are you sure you want to delete server name &nbsp;<strong><b>{{ctrl.servername}}</b></strong></p>
+        </div>
+        <div class="panel-footer text-right">
+            <button class="btn btn-default btn-rounded btn-gradient" data-ng-click="closeModalForm()">No</button>
+            <button class="btn btn-success btn-rounded btn-gradient" data-ng-click="ctrl.onDeleteConfirn()">Yes</button>
+        </div>
+    </div>
+</div>
+
+

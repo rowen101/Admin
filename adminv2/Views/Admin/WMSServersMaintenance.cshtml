@@ -1,0 +1,165 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="panel-title">
+                {{ctrl.maintenanceName}} List
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-2"><button class="btn btn-success" onclick="OpenCustomModal('ActionModal')" ng-click="ctrl.SetAdd()">Add {{ctrl.maintenanceName}}</button></div>
+                <div class="col-md-3 pull-right">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                        <input type="text" ng-model="search" placeholder="search" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Server</th>
+                                <th>Database</th>
+                                <th>IP Address</th>
+                                <th>Branch</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in ctrl.mainList| filter:search" class="{{item.status == 'I' ? 'text-danger' : ''}}">
+                                <td style="color:black !important">
+                                    <a class="pointer" title="Edit" ng-click="ctrl.SetEdit(item.serverId)" onclick="OpenCustomModal('ActionModal')"><i class="glyphicon glyphicon-edit"></i></a>
+                                    <a class="pointer text-danger" title="Delete" ng-click="ctrl.SetWmsServer(item.serverId)" onclick="OpenCustomModal('confirmDeleteModal')"><i class="glyphicon glyphicon-trash"></i></a>
+                                    <span ng-show="item.status == 'A'">
+                                        <a class="pointer text-success" title="Deactivate" ng-click="ctrl.DeactivateWmsServer(item.serverId)"><i class="glyphicon glyphicon-ok"></i></a>
+                                    </span>
+                                    <span ng-show="item.status == 'I'">
+                                        <a class="pointer text-danger" title="Activate" ng-click="ctrl.ActivateWmsServer(item.serverId)"><i class="glyphicon glyphicon-ban-circle"></i></a>
+                                    </span>
+                                </td>
+                                <td>{{item.servername}}</td>
+                                <td>{{item.dbname}}</td>
+                                <td>{{item.ipaddress}}</td>
+                                <td>{{item.brancode}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="ActionModal" class="popup-basic popup-lg bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <form name="ActionModalForm" novalidate>
+            <div class="panel-heading">
+                <span class="panel-icon">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </span>
+                <span class="panel-title">{{ctrl.actionName}} {{ctrl.maintenanceName}}</span>
+            </div>
+            <div class="panel-body">
+                <div class="row mb5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="sever">Server Name</label>
+                            <input id="server" maxlength="20" type="text" class="form-control" ng-model="ctrl.wmsServer.servername" required uppercased />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dbname">Database Name</label>
+                            <input id="dbname" maxlength="50" type="text" class="form-control" ng-model="ctrl.wmsServer.dbname" required uppercased />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ipadd">IP Address</label>
+                            <input id="ipadd" maxlength="50" type="text" class="form-control" ng-model="ctrl.wmsServer.ipaddress" required/>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Owner Type</label>
+                            <select class="form-control" ng-options="item.brancode as item.branname for item in ctrl.brancodeList" ng-model="ctrl.wmsServer.brancode" required>
+                                <option value="" disabled>----Select Branch----</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row mb5">
+
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="uname">sql user</label>
+                            <input id="uname " type="text" maxlength="50" class="form-control" ng-model="ctrl.wmsServer.sqluser" required/>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="pass">sql pass</label>
+                            <input id="pass" type="text" maxlength="50" class="form-control" ng-model="ctrl.wmsServer.sqlpass" required/>
+                        </div>
+                    </div>
+                </div>
+
+      
+
+                <div class="row pull-right">
+                    <input type="button" value="Save" ng-if="ctrl.actionName == 'Add'" ng-disabled="!ActionModalForm.$valid" ng-click="ActionModalForm.$valid && ctrl.AddWmsServer()" class="btn btn-success" />
+                    <input type="button" value="Save" ng-if="ctrl.actionName == 'Edit'" ng-disabled="!ActionModalForm.$valid" ng-click="ActionModalForm.$valid && ctrl.EditWmsServer()" class="btn btn-success" />
+                    <button type="button" class="btn btn-default" onclick="CloseCustomModal('ActionModal')">Close</button>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
+<div id="confirmDeleteModal" class="popup-basic bg-none mfp-with-anim mfp-hide">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="glyphicons glyphicons-circle_exclamation_mark"></i>
+            </span>
+            <span class="panel-title"> Confirm Deletion</span>
+        </div>
+        <form ng-submit="ctrl.RemoveWmsServer()">
+            <div class="panel-body">
+                Are you sure you want to delete {{ctrl.wmsServer.servername}}?
+            </div>
+            <div class="panel-footer text-right">
+                <input type="submit" class="btn btn-danger" value="Delete" />
+                <button type="button" class="btn btn-default" onclick="CloseCustomModal('confirmDeleteModal')">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+

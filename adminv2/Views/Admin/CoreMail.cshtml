@@ -1,0 +1,77 @@
+﻿@{Layout = null;}
+
+<style>
+    .table {
+	table-layout:fixed;
+}
+
+.table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+}
+</style>
+<section class="content" ng-init="ctrl.onInit(1)">
+    <div class="panel box-solid">
+
+        <div class="panel-body " ng-show="!ctrl.isView">
+
+            <div class="row margin">
+                <div class="col-lg-2">
+                    <a class="btn btn-info btn-sm pointer btn-rounded btn-gradient" data-ng-click="ctrl.onNew()" data-ng-show="canAdd">New</a>
+                </div>
+            </div>
+
+            <span><br /></span>
+            <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.onInit(newPageNumber)">
+            </dir-pagination-controls>
+
+            <div id="exportable">
+                <table class="table table-condensed table-striped table-hover table-responsive" context-menu data-target="menu-table">
+
+                    <tr>
+                        
+                        <th>Mail ID</th>
+                        <th>Sender Name</th>
+                        <th>Recipients</th>
+                        <th>Subject</th>
+                        <th>Created By</th>
+                        <th>Sending Date</th>
+                    </tr>
+
+
+                    <tr ng-show="activityItemList.length <= 0"><td colspan="6" style="text-align:center;">NO data!!</td></tr>
+                    <tr dir-paginate="item in ctrl.mailList |itemsPerPage: ctrl.itemsPerPage | filter:search:strict" total-items="ctrl.total_count" class="pointer" data-ng-click="ctrl.onReadMail(item.body,item.mailId)">
+                        <td>{{item.mailId}}</td>
+                        <td>{{item.sendername}}</td>
+                        <td>{{item.recipients}}</td>
+                        <td>{{item.subject}}</td>
+                        <td>{{item.createdby}}</td>
+                        <td>{{item.createdate | date:"MM/dd/yyyy"}}</td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <dir-pagination-controls max-size="7" ng-hide="search.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.onInit(newPageNumber)">
+            </dir-pagination-controls>
+
+        </div>
+
+        <div class="panel-body"  ng-show="ctrl.isView">
+            <button class="btn btn-info"  data-ng-click="ctrl.isView=false;"><span class="fa fa-mail-reply"></span></button><button class="btn btn-info" data-ng-click="ctrl.onResend()"><span class="glyphicons glyphicons-repeat"></span></button>
+            <br />
+            <div ng-bind-html="ctrl.Mailbody | to_trusted"></div>
+        </div>
+    </div>
+
+
+</section>
+

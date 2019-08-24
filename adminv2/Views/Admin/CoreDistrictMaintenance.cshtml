@@ -1,0 +1,138 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-9 col-sm-7 col-xs-7">
+        <button class="btn btn-success" onclick="OpenCustomModal('districtModal')" ng-click="ctrl.SetAdd();">Create New District</button>
+    </div>
+    <div class="col-md-3 col-sm-5 col-xs-5">
+        <div class="input-group">
+            <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+            <input type="text" class="form-control form-inline pull-right" placeholder="Search" ng-model="searchKpi">
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <p class="panel-title">Manage Districts</p>
+            </div>
+            <div class="panel-body" style="height:50vh; overflow:auto;">
+                <table class="table table-hover ">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>District Code</th>
+                            <th>Name</th>
+                            <th>Head</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in ctrl.districtList | filter:searchKpi">
+                            <td style="color:black !important">
+                                <a class="pointer" title="Edit District" ng-click="ctrl.setEdit(item.districtcode);" onclick="OpenCustomModal('districtModal')"><i class="glyphicon glyphicon-edit"></i></a>
+                                <a class="pointer text-danger" title="Delete District" ng-click="ctrl.setSelectedDistrict(item.districtcode)" onclick="OpenCustomModal('confirmDeleteModal')"><i class="glyphicon glyphicon-trash"></i></a>
+                            </td>
+                            <td>{{item.districtcode}}</td>
+                            <td>{{item.districtname}}</td>
+                            <td>{{item.districtheadname}}</td>
+                            <td>{{item.districtheademail}}</td>
+                            <td>{{item.districtheadcontact}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div id="districtModal" class="popup-basic popup-lg bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="fa fa-pencil"></i>
+            </span>
+            <span class="panel-title"> {{ctrl.EventName}} District </span>
+        </div>
+        <form name="DistModalForm">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dcode">District Code : </label>
+                            <input ng-hide="ctrl.EventName == 'Edit'" class="form-control" id="dcode" type="text" ng-model="ctrl.districtModel.districtcode" uppercased />
+                            <p ng-show="ctrl.EventName == 'Edit'">{{ctrl.districtModel.districtcode}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dname">District Name : </label>
+                            <input class="form-control" id="dname" type="text" ng-model="ctrl.districtModel.districtname" uppercased />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="demail">Head Email : </label>
+                            <div class="input-group">
+                                <span class="input-group-addon" style="cursor:pointer;" ng-click="ctrl.GetDistrictHead()">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                <input class="form-control" id="demail" type="text" ng-model="ctrl.districtModel.districtheademail" ng-blur="ctrl.GetDistrictHead()" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dname">Head Name : </label>
+                            <input class="form-control" id="dname" type="text" ng-model="ctrl.districtModel.districtheadname" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dcont">Head Contact : </label>
+                            <input class="form-control" id="dcont" type="text" ng-model="ctrl.districtModel.districtheadcontact" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="did">Head ID : </label>
+                            <input class="form-control" id="did" type="text" ng-model="ctrl.districtModel.districtheadid" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer text-right">
+                <input type="submit" class="btn btn-primary" ng-hide="ctrl.EventName == 'Edit'" ng-disabled="!DistModalForm.$valid" ng-click="DistModalForm.$valid && ctrl.AddDistrict()" value="Submit" />
+                <input type="submit" class="btn btn-primary" ng-show="ctrl.EventName == 'Edit'" ng-disabled="!DistModalForm.$valid" ng-click="DistModalForm.$valid && ctrl.EditDistrict()" value="Update" />
+                <button type="button" class="btn btn-default" ng-click="self.GetBranchMstList()" onclick="CloseCustomModal('districtModal')">Close</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div id="confirmDeleteModal" class="popup-basic bg-none mfp-with-anim mfp-hide">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="glyphicons glyphicons-circle_exclamation_mark    "></i>
+            </span>
+            <span class="panel-title"> Confirm Deletion</span>
+        </div>
+        <form ng-submit="ctrl.DeleteDistrict()">
+            <div class="panel-body">
+                Are you sure you want to delete {{ctrl.districtModel.districtcode}}?
+            </div>
+            <div class="panel-footer text-right">
+                <input type="submit" class="btn btn-danger" value="Delete" />
+                <button type="button" class="btn btn-default" onclick="CloseCustomModal('confirmDeleteModal')">Close</button>
+            </div>
+        </form>
+    </div>
+</div>

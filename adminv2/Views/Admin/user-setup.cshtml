@@ -1,0 +1,356 @@
+﻿@{
+    Layout = null;
+}
+
+<style>
+    .arrowMove {
+        padding-top: 3px;
+    }
+</style>
+<section class="content">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="glyphicon glyphicon-user"></i>
+            </span>
+            <span class="panel-title">Update User Right's</span>
+        </div>
+        <form ng-init="ctrl.init()">
+            <div class="panel-body">
+
+                <!--Begin:Prompt Message-->
+                <div class="alert alert-danger alert-sm" ng-show="ctrl.isError">
+                    <i class="fa fa-remove pr10"></i>
+                    <strong>ERROR!</strong>    {{ctrl.errorMessage}}
+                </div>
+                <div class="alert alert-info alert-sm" ng-show="ctrl.isSuccess">
+                    <i class="fa fa-check"></i>
+                    <strong>SUCCESS!</strong>    {{ctrl.successMessage}} <span><code><a class="pointer" ng-click="ctrl.isError=false;ctrl.isSuccess=false;">Update Again</a></code></span>
+                </div>
+                <!--End:Prompt Message-->
+
+                <div ng-hide="ctrl.isSuccess">
+
+
+                    <accordion>
+                        <accordion-group>
+                            <accordion-heading>
+                                User Details
+                            </accordion-heading>
+                            <div class="row">
+
+                                <section class="col-lg-6 connectedSortable ui-sortable">
+                                    <div class="panel panel-primary collapsed-box">
+                                        <div class="panel-body ">
+                                            <div class="form-horizontal">
+                                                <!--usertype-->
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Userrole:</label>
+                                                    <div class="col-lg-5">
+                                                        <div class="input-group">
+                                                            <select class="form-control" ng-model="ctrl.userData.coreUsers.usertype">
+                                                                <option>=Select=</option>
+                                                                <option value="E">Employee</option>
+                                                                <option value="X">External Users</option>
+                                                            </select>
+                                                            <span class="input-group-btn" ng-if="ctrl.userData.coreUsers.usertype=='E'">
+                                                                <button class="btn btn-primary" type="button" ng-click="ctrl.onSearchEmployeeNotUser()"><span class="glyphicon glyphicon-search"></span></button>
+                                                                
+                                                            </span>
+                                                          
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--Employee Id-->
+                                                <div class="form-group" ng-if="ctrl.userData.coreUsers.usertype=='E'">
+                                                    <label class="col-lg-3 control-label">Employee Id:</label>
+                                                    <div class="col-lg-5">
+                                                        <input type="text" class="form-control" ng-model="ctrl.userData.coreUsers.emplId" maxlength="10" ng-disabled="ctrl.userData.coreUsers.usertype=='E'">
+                                                    </div>
+                                                </div>
+                                                <!--Firstname-->
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">First Name:</label>
+                                                    <div class="col-lg-5">
+                                                        <input type="text" class="form-control" ng-model="ctrl.userData.coreUsers.firstname" maxlength="50" ng-disabled="ctrl.userData.coreUsers.usertype=='E'" required>
+                                                    </div>
+                                                </div>
+                                                <!--Lastname & Middlename-->
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Last Name:</label>
+                                                    <div class="col-lg-5">
+                                                        <input type="text" class="form-control" ng-model="ctrl.userData.coreUsers.lastname" maxlength="50" ng-disabled="ctrl.userData.coreUsers.usertype=='E'" required>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <input type="text" class="form-control" placeholder="MI" ng-model="ctrl.userData.coreUsers.middlename" maxlength="10" ng-disabled="ctrl.userData.coreUsers.usertype=='E'" required>
+                                                    </div>
+                                                </div>
+                                                <!--Nickname-->
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Nickname:</label>
+                                                    <div class="col-lg-5">
+                                                        <input type="text" class="form-control" ng-model="ctrl.userData.coreUsers.nickname" maxlength="50" required>
+                                                    </div>
+                                                </div>
+                                                <!--Username-->
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Username:</label>
+                                                    <div class="col-lg-5">
+                                                        <input type="text" class="form-control" ng-model="ctrl.userData.coreUsers.username" maxlength="50" required>
+                                                    </div>
+                                                </div>
+                                                <!--Password-->
+                                                <div class="form-group" ng-if="ctrl.userData.coreUsers.usertype!='E'">
+                                                    <label class="col-lg-3 control-label" >Password:</label>
+                                                    <div class="col-lg-5">
+                                                        <button ng-hide="ctrl.userId==0" class="btn btn-primary btn-gradient btn-rounded" ng-click="openModalForm('#modal-change-userpass')">Update password</button>
+                                                        <input  ng-show="ctrl.userId==0" type="password" class="form-control" maxlength="13" ng-model="ctrl.userData.coreUsers.userpass" ng-placeholder="ctrl.unchange">
+                                                    </div>
+                                                </div>
+                                                <!--Userrole-->
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Userrole:</label>
+                                                    <div class="col-lg-5">
+                                                        <select class="form-control" ng-model="ctrl.userData.coreUsers.userrole">
+                                                            <option>=Select=</option>
+                                                            <option>USER</option>
+                                                            <option>ADMIN</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--Email Add-->
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Email:</label>
+                                                    <div class="col-lg-5">
+                                                        <input type="text" class="form-control" ng-model="ctrl.userData.coreUsers.emailaddress" maxlength="50">
+                                                    </div>
+                                                </div>
+                                                <!--Mobile-->
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Mobile:</label>
+                                                    <div class="col-lg-5">
+                                                        <input type="email" class="form-control" placeholder="+63 000 0000 000" ng-model="ctrl.userData.coreUsers.mobileno" maxlength="13">
+                                                    </div>
+                                                </div>
+                                                <!--Status-->
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Status:</label>
+                                                    <div class="col-lg-5">
+                                                        <select class="form-control" ng-model="ctrl.userData.coreUsers.status">
+                                                            <option>=Select=</option>
+                                                            <option value="N">New</option>
+                                                            <option value="A">Active</option>
+                                                            <option value="I">InActive</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                            </div>
+                        </accordion-group>
+                        <accordion-group>
+                            <accordion-heading>
+                                Menu Right's
+                            </accordion-heading>
+                            <div class="row">
+                                <section class="col-lg-6 connectedSortable ui-sortable">
+                                    <div class="panel box-danger">
+                                        <div class="panel-heading">
+                                            <span class="panel-icon">
+                                                <i class="glyphicons glyphicons-show_thumbnails_with_lines"></i>
+                                            </span>
+                                            <span class="panel-title">Application List</span>
+                                        </div>
+
+                                        <div class="panel-body no-padding">
+                                            <table class="table table-hover table-condensed table-striped" context-menu="ctrl.onRightClick(2)" data-target="menu-option">
+                                                <tr>
+                                                    <th></th>
+                                                    <th>System Name</th>
+                                                </tr>
+                                                <tr ng-repeat="x in ctrl.userData.userSys">
+                                                    <th><input type="checkbox" ng-model="x.IsCheck" /></th>
+                                                    <td>{{x.SYSNAME}}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <section class="col-lg-6 connectedSortable ui-sortable">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <span class="panel-title">Access Rights</span>
+                                        </div>
+
+                                        <div class="panel-body no-padding">
+                                            <accordion>
+                                                <accordion-group ng-repeat="x in ctrl.userData.userSys" ng-show="x.IsCheck">
+                                                    <accordion-heading>
+                                                        {{x.SYSNAME}}
+                                                    </accordion-heading>
+                                                    <table class="table table-hover table-condensed table-striped" context-menu="ctrl.onRightClick2(3,x.SYSID)" data-target="menu-option">
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Menu Name</th>
+                                                            <th>
+                                                                <span class="dropdown" dropdown on-toggle="toggled(open)">
+                                                                    <a href class="dropdown-toggle" dropdown-toggle>
+                                                                        Add <i class="fa fa-ellipsis-vertical"></i>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li>
+                                                                            <a class="pointer" ng-click="ctrl.onSelect(x.SYSID,1)">Select All</a>
+                                                                            <a class="pointer" ng-click="ctrl.onUnSelect(x.SYSID,1)">Un-Select All</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </th>
+                                                            <th>
+                                                                <span class="dropdown" dropdown on-toggle="toggled(open)">
+                                                                    <a href class="dropdown-toggle" dropdown-toggle>
+                                                                        Edit <i class="rjg-ellipsis-vert"></i>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li>
+                                                                            <a class="pointer" ng-click="ctrl.onSelect(x.SYSID,2)">Select All</a>
+                                                                            <a class="pointer" ng-click="ctrl.onUnSelect(x.SYSID,2)">Un-Select All</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </th>
+                                                            <th>
+                                                                <span class="dropdown" dropdown on-toggle="toggled(open)">
+                                                                    <a href class="dropdown-toggle" dropdown-toggle>
+                                                                        Delete <i class="rjg-ellipsis-vert"></i>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li>
+                                                                            <a class="pointer" ng-click="ctrl.onSelect(x.SYSID,3)">Select All</a>
+                                                                            <a class="pointer" ng-click="ctrl.onUnSelect(x.SYSID,3)">Un-Select All</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </th>
+                                                        </tr>
+                                                        <tr ng-repeat="mnu in x.UserMenu">
+                                                            <th><input type="checkbox" ng-model="mnu.canOpen" /></th>
+                                                            <td>{{mnu.menuName}}</td>
+                                                            <th><input type="checkbox" ng-disabled="!mnu.isTrans" ng-model="mnu.canAdd" /></th>
+                                                            <th><input type="checkbox" ng-disabled="!mnu.isTrans" ng-model="mnu.canEdit" /></th>
+                                                            <th><input type="checkbox" ng-disabled="!mnu.isTrans" ng-model="mnu.canDelete" /></th>
+                                                        </tr>
+                                                    </table>
+                                                </accordion-group>
+                                            </accordion>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </accordion-group>
+
+
+                    </accordion>
+
+                    <div class="dropdown position-fixed" id="menu-option">
+                        <ul class="dropdown-menu" role="menu">
+
+                            <li>
+                                <a class="pointer" role="menuitem"
+                                   ng-click="ctrl.checkAll()">
+                                    <span class="rjg-check">Select All</span>
+                                </a>
+                                <a class="pointer" role="menuitem"
+                                   ng-click="ctrl.unCheckAll()">
+                                    <span class="rjg-check-empty">Un-Select All</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="panel-footer text-right">
+                <a class="btn-link btn pointer btn-gradient btn-rounded" ng-click="ctrl.Userlist()">Back</a>
+                <button type="button" ng-click="ctrl.saveChange()" class="btn btn-success btn-gradient btn-rounded" ng-hide="ctrl.isSuccess">
+                    <i class="glyphicon glyphicon-saved"></i> Save
+                </button>
+            </div>
+
+        </form>
+    </div>
+</section>
+
+<div id="modal-employee-window" class="popup-basic popup-lg bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>&nbsp; Employee List</span>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+
+                <div class="form-group row">
+                    <div class="col-lg-12">
+
+                        <input type="text" class="form-control" placeholder="Search..." ng-model="ctrl.searchEmployee" ng-enter="ctrl.onSearchEmployeeNotUser(ctrl.searchEmployee)">
+                    </div>
+
+                </div>
+            </form>
+
+            <span>{{ctrl.itemCount}} line item </span>
+            <div style="overflow:scroll; max-height:400px;">
+                <table class="table table-hover table-condensed table-striped">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>SBU</th>
+                        <th></th>
+                    </tr>
+                    <tr ng-repeat="emp in ctrl.lstEmployee">
+                        <td>{{emp.employeename2}}</td>
+                        <td>{{emp.emailadd}}</td>
+                        <td>{{emp.corporate}}</td>
+                        <td><button class="btn btn-primary btn-rounded btn-gradient btn-sm" ng-click="ctrl.onSelectEmployee(emp)">Add</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+      
+            <button class="btn btn-default btn-rounded btn-gradient" ng-click="closeModalForm()">Close</button>
+        </div>
+    </div>
+</div>
+
+<div id="modal-change-userpass" class="popup-basic popup-sm bg-none  mfp-with-anim mfp-hide">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicons glyphicons-lock"></i>&nbsp; User password</span>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+
+                <div class="form-group row">
+                    <div class="col-lg-12">
+
+                        <input type="password" class="form-control" max="13" placeholder="Enter User Password" ng-model="ctrl.userpass">
+                    </div>
+
+                </div>
+            </form>
+
+ 
+        </div>
+        <div class="panel-footer text-right">
+
+            <button class="btn btn-default btn-rounded btn-gradient" ng-click="closeModalForm()">Close</button>
+            <button class="btn btn-primary btn-rounded btn-gradient" ng-click="ctrl.onSaveUserpassword()">Save</button>
+        </div>
+    </div>
+</div>

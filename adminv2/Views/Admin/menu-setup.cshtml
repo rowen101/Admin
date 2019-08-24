@@ -1,0 +1,150 @@
+﻿@{
+    Layout = null;
+}
+
+<section class="content" ng-controller="admin.menu.setup" data-ng-init="getAppsDetails()">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <span class="panel-icon"><i  data-ng-class="iconform"></i></span>
+            <span class="panel-title"> {{titleform}}</span>
+        </div>
+        <form class="form-horizontal" >
+            <div class="panel-body">
+                <!--Begin:Prompt Message-->
+                <div class="alert alert-danger alert-sm" ng-show="isError">
+                    <i class="fa fa-remove pr10"></i>
+                    <strong>ERROR!</strong>    {{errorMessage}}
+                </div>
+                <div class="alert alert-info alert-sm" ng-show="isSuccess">
+                    <i class="fa fa-check"></i>
+                    <strong>SUCCESS!</strong>  {{successMessage}} <a class="pointer" data-ng-click="onCreateNew()" ng-show="isNew"><code>Create New</code></a>
+                </div>
+                <!--End:Prompt Message-->
+                <div data-ng-hide="isSuccess">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Application <span class="text-info">*</span></label>
+                        <div class="col-lg-5">
+                            <select class="form-control" ng-options="item.sysId as item.sysname for item in systemList" ng-model="MenuData.sysId" data-ng-change="changeApps()" required></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Menu ID <span class="text-info">*</span></label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" ng-model="MenuData.menucode" placeholder="[OPTIONAL SYSTEM GENERATE]" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Menu Name <span class="text-info">*</span></label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" ng-model="MenuData.menuname" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Parent Menu</label>
+                        <div class="col-lg-5">
+                            <select class="form-control" data-ng-options="item.menucode as item.menuname for item in parentMenuList | orderBy:'menuorder'" data-ng-model="MenuData.prtmenucode"></select>
+                        </div>
+                    </div>
+             
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Menu Order <span class="text-info">*</span></label>
+                        <div class="col-lg-5">
+                            <input type="number" class="form-control" ng-model="MenuData.menuorder" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Menu Class Icon</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control " ng-model="MenuData.classicon" >
+                        </div>
+                        <span ng-class="MenuData.classicon" ></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Menu Type</label>
+                        <div class="col-lg-5">
+                            <select class="form-control" data-ng-options="item.status_code as item.status_display for item in MenuType" data-ng-model="MenuData.menutype"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Menu Status &nbsp;&nbsp;</label>
+                        <div class="col-lg-1 checkbox">
+
+                            <label>
+                                <input type="checkbox" ng-model="MenuData.isactive">
+                                Active
+                            </label>
+
+                        </div>
+                        <div class="col-lg-2 checkbox">
+
+                            <label>
+                                <input type="checkbox" ng-model="MenuData.istransaction">
+                                IsTrans(Add,Edit,Delete)
+                            </label>
+
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Default Access Right's &nbsp;&nbsp;</label>
+                        <div class="col-lg-1 checkbox">
+
+                            <label>
+                                <input type="checkbox" ng-model="MenuData.defaultemployee">
+                                Customer
+                            </label>
+
+                        </div>
+                        <div class="col-lg-1 checkbox">
+
+                            <label>
+                                <input type="checkbox" ng-model="MenuData.defaultcustomer">
+                                Employee
+                            </label>
+
+                        </div>
+                        <div class="col-lg-2 checkbox">
+
+                            <label>
+                                <input type="checkbox" ng-model="MenuData.defaultsupplier">
+                                Supplier
+                            </label>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Access Device &nbsp;&nbsp;</label>
+                        <div class="col-lg-1 checkbox">
+
+                            <label>
+                                <input type="checkbox" ng-model="MenuData.forweb">
+                                Web
+                            </label>
+
+                        </div>
+                        <div class="col-lg-1 checkbox">
+
+                            <label>
+                                <input type="checkbox" ng-model="MenuData.formobile">
+                                Mobile
+                            </label>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer text-right">
+                <a class="btn-link btn btn-gradient btn-rounded" data-ng-click="Menulist()" style="cursor:pointer" data-ng-hide="isSuccess">Back</a>
+                <button class="btn btn-primary btn-gradient btn-rounded" data-ng-click="Menulist()" data-ng-show="isSuccess">Back</button>
+                <button type="button" data-ng-click="onSaveChange()" class="btn btn-success btn-gradient btn-rounded" data-ng-hide="isSuccess">
+                    <i class="glyphicon glyphicon-saved"></i> Save
+                </button>
+           
+               
+
+            </div>
+
+        </form>
+    </div>
+</section>

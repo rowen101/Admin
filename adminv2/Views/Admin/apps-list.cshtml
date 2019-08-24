@@ -1,0 +1,207 @@
+﻿@{
+    Layout = null;
+}
+
+
+<section class="content" >
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <span class="panel-icon">
+                <i class="glyphicon glyphicon-list-alt"></i>
+            </span>
+            <span class="panel-title">
+                Application List
+            </span>
+        </div>
+      
+        <div class="panel-body no-padding">
+            <div class="btn-group block head-toolbar">
+                <a ng-click="ctrl.newApps()" class="btn btn-info pointer"><i class="glyphicons glyphicons-circle_plus"></i> new apps</a>
+                <a ng-click="ctrl.getAppsList()" class="btn btn-info pointer "><i class="glyphicons glyphicons-refresh"></i> refresh</a>
+            </div>
+            <div ng-init="ctrl.getAppsList()" context-menu="onRightClick(message)"
+                 context-menu-close="onClose(closeMessage)"
+                 id="panel-1"
+                 data-target="con_application_list">
+                <table class="table table-hover table-condensed table-striped">
+                    <tr>
+                        <th></th>
+                        <th>
+                            Application
+                        </th>
+                       
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Active
+                        </th>
+                        <th>
+                            IsMaintenance
+                        </th>
+                    </tr>
+
+
+                    <tr ng-repeat="x in ctrl.systemList">
+                        <td>
+                            <a ng-click="ctrl.editApps(x.sysId)" style="cursor:pointer" >update</a>&nbsp;
+                            <a ng-click="ctrl.onShowID(x.sysId,x.sysname); openModalForm('#modal-panel-prompt');" class="pointer text-danger">remove</a>
+                        </td>
+                        <td>{{::x.sysname}}</td>
+                        <td>{{::x.sysdescription}}</td>
+                        <td><span ng-class="x.isactive ? 'glyphicons glyphicons-check font-success' : 'glyphicons glyphicons-remove font-cancel'"></span></td>
+                        <td><span ng-class="x.ismaintenance ? 'glyphicons glyphicons-check font-success' : 'glyphicons glyphicons-remove font-cancel'"></span></td>
+                    </tr>
+
+
+                </table>
+
+                <div class="dropdown position-fixed" id="con_application_list">
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a class="pointer" role="menuitem" tabindex="1"
+                               ng-click="ctrl.getAppsList()"><span class="rjg-arrows-cw"></span>Refresh</a>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="panel-footer"></div>
+    </div>
+  
+    
+</section>
+
+
+<!--modal delete prompt-->
+<div id="modal-panel-app-setup" class="popup-basic popup-lg  mfp-with-anim mfp-hide">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <span class="panel-title">{{ctrl.modalTitle}}</span>
+        </div>
+        <div class="panel-body">
+         
+            <form class="form-horizontal">
+                @*<h2 class="page-header">Step 1</h2>*@
+                <!--Begin:Prompt Message-->
+                <div class="alert alert-danger alert-sm" ng-show="ctrl.isError">
+                    <i class="fa fa-remove pr10"></i>
+                    <strong>ERROR!</strong>    {{ctrl.errorMessage}}
+                </div>
+                <div class="alert alert-info alert-sm" ng-show="ctrl.isSuccess">
+                    <i class="fa fa-check"></i>
+                    <strong>SUCCESS!</strong>  {{ctrl.successMessage}}
+                </div>
+                <!--End:Prompt Message-->
+                <div data-ng-hide="ctrl.isSuccess">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Application Name</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name="appname" data-ng-model="ctrl.appData.sysname" maxlength="50" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">System Code</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" data-ng-model="ctrl.appData.syscode" placeholder="[optional]" maxlength="250">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Description</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" data-ng-model="ctrl.appData.sysdescription" maxlength="250">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Email Support</label>
+                        <div class="col-lg-5">
+                            <input type="email" class="form-control" data-ng-model="ctrl.appData.emailsupport">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"></label>
+                        <div class="col-lg-2 checkbox">
+
+                            <label>
+                                <input type="checkbox" data-ng-model="ctrl.appData.ismaintenance">
+                                Ismaintenance
+                            </label>
+
+                        </div>
+                        <div class="col-lg-2 checkbox">
+
+                            <label>
+                                <input type="checkbox" data-ng-model="ctrl.appData.showwebapps">
+                                Show to Apps
+                            </label>
+
+                        </div>
+                        <div class="col-lg-2 checkbox">
+
+                            <label>
+                                <input type="checkbox" data-ng-model="ctrl.appData.showusermenu">
+                                Show in User Rights
+                            </label>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"></label>
+                        <div class="col-lg-2 checkbox">
+
+                            <label>
+                                <input type="checkbox" data-ng-model="ctrl.appData.isactive">
+                                Active
+                            </label>
+
+                        </div>
+                       
+
+                    </div>
+                </div>
+            </form>
+                
+              
+
+           
+        </div>
+        <div class="panel-footer text-right">
+            <button class="btn btn-primary" data-ng-click="closeModalForm()" data-ng-show="ctrl.isSuccess">Close</button>
+            <button class="btn btn-warning" data-ng-click="ctrl.saveAppsDetails(ctrl.appData)" data-ng-hide="ctrl.isSuccess">Save</button>
+            <button class="btn" data-ng-click="closeModalForm()" data-ng-hide="ctrl.isSuccess">No</button>
+        </div>
+    </div>
+</div>
+
+<!--modal delete prompt-->
+<div id="modal-panel-prompt" class="popup-basic bg-none mfp-with-anim mfp-hide">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-trash"></i>Prompt</span>
+        </div>
+        <div class="panel-body">
+            <!--Begin:Prompt Message-->
+            <div class="alert alert-danger alert-sm" ng-show="ctrl.isError">
+                <i class="fa fa-remove pr10"></i>
+                <strong>ERROR!</strong>    {{ctrl.errorMessage}}
+            </div>
+            <div class="alert alert-info alert-sm" ng-show="ctrl.isSuccess">
+                <i class="fa fa-check"></i>
+                <strong>SUCCESS!</strong>  {{ctrl.successMessage}}
+            </div>
+            <!--End:Prompt Message-->
+            <input type="hidden" id="menuid" data-ng-model="menuid" />
+            <p data-ng-hide="ctrl.isSuccess">Want to remove <strong id="menuname" ng-model="ctrl.menuname"></strong> ?</p>
+        </div>
+        <div class="panel-footer text-right">
+            <button class="btn btn-primary" data-ng-click="closeModalForm()" data-ng-show="isSuccess">Close</button>
+            <button class="btn btn-warning" data-ng-click="ctrl.RemoveApps(); ctrl.getAppsList();" data-ng-hide="isSuccess">Yes</button>
+            <button class="btn" data-ng-click="closeModalForm()" data-ng-hide="isSuccess">No</button>
+        </div>
+    </div>
+</div>
